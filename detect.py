@@ -307,3 +307,5 @@ def main(opt):
 if __name__ == "__main__":
     opt = parse_opt()
     main(opt)
+
+# python detect.py --weights runs/train/exp9/weights/best.pt --save-txt
