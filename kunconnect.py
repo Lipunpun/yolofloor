@@ -10,7 +10,7 @@ from openpyxl import load_workbook
 #-----------------------------------------------------------------------------#
 
 # 要執行的命令及參數
-command = ["python", "./detect.py","--weights", "runs/train/exp2/weights/best.pt","--source","data/images/5.png", "--save-txt"]
+command = ["python", "./detect.py","--weights", "runs/train/exp2/weights/best.pt","--source","data/images/8.png", "--save-txt"]
 
 # 使用 subprocess 模組執行命令
 process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -126,22 +126,48 @@ for txt_file in all_txt_files:
 #                             
 #-----------------------------------------------------------------------------#
 
+import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.cell.cell import MergedCell
+
 # 读取 Excel 文件
 file_path = r"C:\\Users\\user\\Desktop\\Data_Base_kun\\輸入模型資料.xlsx"
-# 载入工作簿
+
+# 使用 pandas 读取目标工作表的数据
+df = pd.read_excel(file_path, sheet_name='建築資訊')
+
+df.iloc[0, 1] = y_group_count  # 修改楼层数 (B2, 注意 iloc 是从 0 开始计数)
+df.iloc[1, 1] = x_group_count  # 修改跨数 (B3)
+
+# 保存修改后的 DataFrame 到临时 Excel 文件
+temp_file_path = r"C:\\Users\\user\\Desktop\\Data_Base_kun\\temp.xlsx"
+df.to_excel(temp_file_path, sheet_name='建築資訊', index=False)
+
+# 使用 openpyxl 载入原始工作簿和临时工作簿
 workbook = load_workbook(file_path)
+temp_workbook = load_workbook(temp_file_path)
 
-# 选择要修改的工作表
-sheet = workbook['建築資訊']  # 替换为您的实际 sheet 名称
+# 获取原始工作簿和临时工作簿中的工作表
+sheet = workbook['建築資訊']
+temp_sheet = temp_workbook['建築資訊']
 
-# 修改特定单元格的值
-sheet.cell(row=2, column=2).value = y_group_count  # 修改楼层数 (A3)
-sheet.cell(row=3, column=2).value = x_group_count  # 修改跨数 (A4)
+# 将临时工作表中的数据写入原始工作表，同时保持格式
+for row in temp_sheet.iter_rows(min_row=1, max_row=temp_sheet.max_row, min_col=1, max_col=temp_sheet.max_column):
+    for cell in row:
+        # 跳过合并单元格
+        if isinstance(sheet[cell.coordinate], MergedCell):
+            continue
+        sheet[cell.coordinate].value = cell.value
+
+# 删除临时文件
+import os
+os.remove(temp_file_path)
 
 # 保存修改后的工作簿
 workbook.save(file_path)
 
-print("建築資訊 Excel 輸入文件更新成功！")
+print("Excel 文件更新成功！")
+
 
 #-----------------------------------------------------------------------------#
 #
@@ -150,10 +176,13 @@ print("建築資訊 Excel 輸入文件更新成功！")
 #-----------------------------------------------------------------------------#
 
 # 要執行的命令及參數
-command = ["python", "./detect.py","--weights"]
+command = ["python", "C:/Users/user/Desktop/Data_Base_kun/Python_MainProgram.py"]
 
-# 使用 subprocess 模組執行命令
-process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+# 指定工作目录为其他文件夹的路径
+working_directory = "C:/Users/user/Desktop/Data_Base_kun/"
+
+# 使用 subprocess 模块执行命令，并指定工作目录
+process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=working_directory)
 
 # 等待命令執行完成
 stdout, stderr = process.communicate()
@@ -164,4 +193,7 @@ if process.returncode == 0:
     print("輸出：", stdout.decode())
 else:
     print("執行失敗！")
-    print("錯誤信息：", stderr.decode())
+    try:
+        print("错误信息：", stderr.decode(errors='ignore'))  # 忽略无法解码的字节
+    except Exception as e:
+        print("无法解码错误信息：", e)
