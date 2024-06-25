@@ -9,7 +9,7 @@ import glob
 #-----------------------------------------------------------------------------#
 
 # 要執行的命令及參數
-command = ["python", "./detect.py","--weights", "runs/train/exp2/weights/best.pt","--source","data/images/12.png", "--save-txt"]
+command = ["python", "./detect.py","--weights", "runs/train/exp3/weights/best.pt","--source","data/images/1.png", "--save-txt"]
 
 # 使用 subprocess 模組執行命令
 process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -133,10 +133,6 @@ file_path = r"C:\\Users\\user\\Desktop\\Data_Base_kun\\yolv5樓層數結果.xlsx
 
 # 使用 pandas 读取目标工作表的数据
 df = pd.read_excel(file_path, sheet_name='1')
-
-######### 測試 #########
-x_group_count = 3
-y_group_count = 3
 
 df.iloc[0, 0] = y_group_count  # 修改楼层数 (B2, 注意 iloc 是从 0 开始计数)
 df.iloc[0, 1] = x_group_count  # 修改跨数 (B3)
