@@ -14,4 +14,4 @@ test: # test images (optional)
 
 # Classes
 names:
-  15: floor
+  0: floor
