@@ -309,4 +309,11 @@ if __name__ == "__main__":
     opt = parse_opt()
     main(opt)
 
-# python detect.py --weights runs/train/exp9/weights/best.pt --source data/images --save-txt
+# 所有照片訓練結果
+# python detect.py --weights runs/train/exp/AllData.pt --source data/images --save-txt
+
+# 二次訓練第一次訓練結果
+# python detect.py --weights runs/train/exp/FirstTrain.pt --source data/images --save-txt
+
+# 二次訓練第二次訓練結果
+# python detect.py --weights runs/train/exp/SecoundTrain.pt --source data/images --save-txt
