@@ -1,0 +1,1 @@
+https://maps.googleapis.com/maps/api/streetview?size=256x256&location=23.9934972,121.6090437&fov=90&heading=300&pitch=20&key=AIzaSyAerBU8-5Ed3gdIqhdIxGbRcAxlQiaIaBw
