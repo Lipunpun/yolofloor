@@ -267,7 +267,7 @@ def run(
 
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "yolov5s.pt", help="model path or triton URL")
+    parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "runs/train/exp6/best.pt", help="model path or triton URL")
     parser.add_argument("--source", type=str, default=ROOT / "data/images", help="file/dir/URL/glob/screen/0(webcam)")
     parser.add_argument("--data", type=str, default=ROOT / "data/onlyfloor.yaml", help="(optional) dataset.yaml path")
     parser.add_argument("--imgsz", "--img", "--img-size", nargs="+", type=int, default=[640], help="inference size h,w")
@@ -309,6 +309,7 @@ def main(opt):
 if __name__ == "__main__":
     opt = parse_opt()
     main(opt)
+# python detect.py --weights runs/train/exp6/best.pt --source data/images --save-txt
 
 # 所有照片訓練結果
 # python detect.py --weights runs/train/exp/AllData.pt --source data/images --save-txt
